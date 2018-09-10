@@ -1,0 +1,97 @@
+<html>
+<head>
+  <title>OAuth2 Sample App - Intuit</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <script>
+    if(window.opener) {
+      window.opener.location.href = '/connected'
+      window.close()
+    }
+
+    function apiCall() {
+      $(".table-responsive").css("display", "none");
+      $("#result tbody").remove();
+      $(".loader").css("display", "block")
+      $.ajax({
+        type: 'get',
+        url: '/customers/import',
+        success: function(data) {
+          console.log("data", data);
+          const response = dasta.responseJSON;
+
+          $(".loader").css("display", "block")
+          $(".table-responsive").css("display", "block");
+
+          $("#result").css("display", "none");
+
+          $('.table-responsive').html(`
+            <h1 style="text-align: center;">Customers imported successfully</h1>
+          `);
+        },
+        error: function(err) {
+          $(".table-responsive").css("display", "block");
+          $(".loader").css("display", "none")
+
+          const errorResponse = err.responseJSON;
+          if (errorResponse && errorResponse.data) {
+            $(".table-responsive > h3").css("display", "block");
+            $('#result').append(`
+              <tbody></tbody>
+            `);
+            $.each(errorResponse.data,function(k,v){
+              $('#result tbody').append(`<tr class="table table-danger bg-danger">
+                <td class="text-center">` + v.name +` </td>
+                <td class="text-center">` + (v.email ? v.email : '') + `</td>
+                <td class="text-center">` + v.reason + `</td>
+                </tr>`
+              );
+            })
+          } else {
+            $('.table-responsive').html(`
+              <h1 style="text-align: center;">Something went wrong. Please try again.</h1>
+            `);
+          }
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="container" style="height: 100%">
+    <img src="loader.gif" style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -32px 0px 0px -32px; display: none" class="loader">
+    <a href="/">Home</a>
+    <h3>Connected!</h3>
+    <p>Welcome<% if (locals.givenName) { %>, <%= locals.givenName %><% } %>!</p>
+    <p>Would you like to import customers from Quickbooks?</p>
+    <div>
+      <button onclick="apiCall()">Import Customers to RepairRabbit</button>
+      <br><br>
+      <!-- <div><code id="result"></code></div> -->
+      <div class="table-responsive" style="display: none;">
+        <h3 style="display: none;">Following customers could not inserted</h3>
+        <table id="result" class="table table-bordered" style="width:100%;">
+          <thead>
+            <tr class="heading">
+              <th>Name</th>
+              <th>Email</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody class="tbody">
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
