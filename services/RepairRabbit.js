@@ -44,12 +44,10 @@ const importCustomersOnRepairRabbit = (jwtToken, qbCustomers) => {
       if (customer && customer.email) {
         return addCustomer(jwtToken, customer)
         .then((response) => {
-          console.log("response-->", response)
           return Object.assign({}, customer);
         })
         .catch((err) => {
-          console.log("err", err)
-          return Object.assign({}, customer, { reason: err.message });
+          return Object.assign({}, customer, { reason: err.error.messages });
         })
       } else {
         return Object.assign({}, customer, { reason: 'Email is required in repairrabbit but passed as empty' });
