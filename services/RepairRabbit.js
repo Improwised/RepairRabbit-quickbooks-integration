@@ -45,7 +45,7 @@ const importCustomersOnRepairRabbit = (jwtToken, qbCustomers) => {
         return addCustomer(jwtToken, customer)
         .then((response) => {
           console.log("response-->", response)
-          return undefined;
+          return Object.assign({}, customer);
         })
         .catch((err) => {
           console.log("err", err)

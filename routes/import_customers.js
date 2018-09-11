@@ -43,15 +43,10 @@ router.get('/', function (req, res) {
     })
   })
   .then((response) => {
-    let unimportedData = _.compact(response);
-    if (unimportedData && unimportedData.length) {
-      res.status(400).json({
-        status: 'success',
-        data: unimportedData
-      })
-    } else {
+    if (response && response.length) {
       res.status(201).json({
-        status: 'success'
+        status: 'success',
+        data: response
       })
     }
   })
