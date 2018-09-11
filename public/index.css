@@ -1,0 +1,200 @@
+* {
+  margin: 0;
+  padding: 0;
+  color: #303030;
+  line-height: 1.7;
+  box-sizing: border-box;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+html, body {
+  font-size: 18px;
+}
+
+body {
+  background-image: url('background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+/* flex */
+.d_f {
+  display: flex;
+}
+
+.f_d_re {
+  flex-direction: row-reverse;
+}
+
+.f_d_c {
+  flex-direction: column;
+}
+
+.j_c_c {
+  justify-content: center;
+}
+
+.j_c_s_b {
+  justify-content: space-between;
+}
+
+.j_c_s_a {
+  justify-content: space-around;
+}
+
+.a_i_c {
+  align-items: center;
+}
+
+.a_i_b {
+  align-items: flex-end;
+}
+
+.a_s_c {
+  align-self: center;
+}
+
+.f_g_1 {
+  flex-grow: 1;
+}
+
+.f_w{
+  flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 767px) {
+  .f_w_m {
+    flex-wrap: wrap;
+  }
+}
+
+a {
+  color: #F25B30;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.c1 {
+  color: #00cdc1;
+}
+
+.c2 {
+  color: #2CA01C;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.tabel-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.container {
+  min-height: 98vh;
+}
+
+.header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.footer {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.main {
+  margin: 15px;
+  padding: 30px;
+  max-width: 400px;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.main ul {
+  padding: 15px;
+}
+
+.main ul li {
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: 0.07s all linear;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.btn-green {
+  color: white;
+  background-color: #2CA01C;
+}
+
+.btn-dark-green {
+  color: white;
+  background-color: #00645f;
+}
+
+.connected .main {
+  max-width: 100%;
+}
+
+.connected .main table {
+  border-spacing: 0px;
+}
+
+.connected .main table td,
+.connected .main table th {
+  line-height: 4;
+  padding: 0 30px;
+  vertical-align: middle;
+  border-bottom: 3px solid white;
+}
+
+.loader {
+  display: none;
+}
+
+.hide {
+  display: none;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.bk-green {
+  background-color: #f5faea;
+}
+
+.bk-red {
+  background-color: #ffe9e5;
+}

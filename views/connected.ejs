@@ -1,97 +1,121 @@
 <html>
-<head>
-  <title>OAuth2 Sample App - Intuit</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
-  <script>
-    if(window.opener) {
-      window.opener.location.href = '/connected'
-      window.close()
-    }
-
-    function apiCall() {
-      $(".table-responsive").css("display", "none");
-      $("#result tbody").remove();
-      $(".loader").css("display", "block")
-      $.ajax({
-        type: 'get',
-        url: '/customers/import',
-        success: function(data) {
-          console.log("data", data);
-          const response = dasta.responseJSON;
-
-          $(".loader").css("display", "block")
-          $(".table-responsive").css("display", "block");
-
-          $("#result").css("display", "none");
-
-          $('.table-responsive').html(`
-            <h1 style="text-align: center;">Customers imported successfully</h1>
-          `);
-        },
-        error: function(err) {
-          $(".table-responsive").css("display", "block");
-          $(".loader").css("display", "none")
-
-          const errorResponse = err.responseJSON;
-          if (errorResponse && errorResponse.data) {
-            $(".table-responsive > h3").css("display", "block");
-            $('#result').append(`
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>RepairRabbit - Quickbooks Integration</title>
+    <meta name="description" content="RepairRabbit - Quickbooks Integration"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Montserrat|Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="index.css">
+  </head>
+  <body>
+    <div class="container d_f a_i_c j_c_c connected">
+      <div class="main">
+        <div class="header text-center mb-20">
+          <img src="rr.png" alt="integration with quickbook">
+        </div>
+        <div class="hwci">
+          <div>
+            <h2 class="text-center mb-20">Connected!</h2>
+            <p class="mb-20 text-center">Would you like to import customers from Quickbooks to RepairRabbit?</p>
+          </div>
+          <div class="text-center">
+            <button class="btn btn-dark-green" onclick="apiCall()">Import Customers</button>
+          </div>
+        </div>
+        <div class="text-center loader mt-20">
+          <img src="loader.gif">
+        </div>
+        <div class="customers hide">
+          <div class="d_f a_i_c j_c_s_b">
+            <h2 class="mt-20">Customers Data Imported!</h2>
+            <a href="/connected"><button class="btn btn-dark-green">+ Import Customers</button></a>
+          </div>
+          <div class="tabel-responsive">
+            <table class="mt-20">
+              <thead>
+                <tr>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-center">Status</th>
+                  <th class="text-left">Response</th>
+                </tr>
+              </thead>
               <tbody></tbody>
-            `);
-            $.each(errorResponse.data,function(k,v){
-              $('#result tbody').append(`<tr class="table table-danger bg-danger">
-                <td class="text-center">` + v.name +` </td>
-                <td class="text-center">` + (v.email ? v.email : '') + `</td>
-                <td class="text-center">` + v.reason + `</td>
-                </tr>`
-              );
-            })
-          } else {
-            $('.table-responsive').html(`
-              <h1 style="text-align: center;">Something went wrong. Please try again.</h1>
-            `);
-          }
-        }
-      });
-    }
-  </script>
-</head>
-<body>
-  <div class="container" style="height: 100%">
-    <img src="loader.gif" style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin: -32px 0px 0px -32px; display: none" class="loader">
-    <a href="/">Home</a>
-    <h3>Connected!</h3>
-    <p>Welcome<% if (locals.givenName) { %>, <%= locals.givenName %><% } %>!</p>
-    <p>Would you like to import customers from Quickbooks?</p>
-    <div>
-      <button onclick="apiCall()">Import Customers to RepairRabbit</button>
-      <br><br>
-      <!-- <div><code id="result"></code></div> -->
-      <div class="table-responsive" style="display: none;">
-        <h3 style="display: none;">Following customers could not inserted</h3>
-        <table id="result" class="table table-bordered" style="width:100%;">
-          <thead>
-            <tr class="heading">
-              <th>Name</th>
-              <th>Email</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody class="tbody">
-
-          </tbody>
-        </table>
+            </table>
+          </div>
+        </div>
+        <div class="somethingWentWrong text-center hide mt-20">
+          <h3>Something went wrong <a href="/connected">Please Try Again</a></h3>
+        </div>
+        <div class="footer text-center mt-20">© All rights reserved RepairRabbit</div>
       </div>
     </div>
-  </div>
-
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</body>
+    <!--  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!--  -->
+    <script>
+      if(window.opener) {
+        window.opener.location.href = '/connected';
+        window.close();
+      }
+      function convertIntoArray(data) {
+        const array = [];
+        for (var k in data) {
+          if (data.hasOwnProperty(k)) {
+            array.push({
+              key: k,
+              value: data[k]
+            });
+          }
+        }
+        return array;
+      }
+      function isArray(a) {
+        return !!a && a.constructor === Array;
+      }
+      function messages(messages) {
+        let messagesList = messages;
+        if (typeof messagesList === 'string') {
+          return messagesList;
+        }
+        if (!isArray(messagesList)) {
+          messagesList = convertIntoArray(messagesList);
+        }
+        let list = "";
+        $.each(messagesList,function(key, message){
+          list += "<div><strong>"+message.key+": </strong>"+ message.value[0]+"</div>";
+        });
+        return list;
+      }
+      function apiCall() {
+        $(".customers").hide();
+        $(".loader").show();
+        $.ajax({
+          type: 'get',
+          url: '/customers/import',
+          success: function(response) {
+            console.log(response, response.data);
+            const customers = response.data;
+            $(".loader").css("display", "none");
+            $.each(customers,function(k,v){
+              $('.customers tbody').append(`<tr class="`+ (v.reason ? "bk-red" : "bk-green") +`">
+                <td class="text-left">` + v.name +` </td>
+                <td class="text-left">` + (v.email ? v.email : '-') + `</td>
+                <td class="text-center">` + (v.reason ? 'Failure' : 'Success') + `</td>
+                <td class="text-left">` + messages(v.reason) + `</td>
+                </tr>`
+              );
+            });
+            $(".customers").show();
+            $(".hwci").hide();
+          },
+          error: function(error) {
+            $(".loader").css("display", "none");
+            $(".somethingWentWrong").show();
+            $(".hwci").hide();
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
